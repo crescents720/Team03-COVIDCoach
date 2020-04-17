@@ -25,8 +25,8 @@ $ flask run
 ```
 ## Authors
 
-* **Yang Yang** 
 * **Meng Ding** 
 * **Yiqiao Lu** 
+* **Yang Yang** 
 * **Zan Zhang** 
 * **Yang Zhang** 
