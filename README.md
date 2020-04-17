@@ -6,7 +6,6 @@ CS 361 Project Team03-COVIDCoach
 Create a venv folder within the project folder:
 ```
 $ python3 -m venv venv
-
 ```
 To activate the environment:
 ```
