@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from newsapi import NewsApiClient
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -14,8 +15,8 @@ def news_page():
     title = 'COVID Coach Get News'
     
     newsapi = NewsApiClient(api_key="31119c92ed55433d9083373aba50327b")
-    topheadlines = newsapi.get_top_headlines(q='covid',language='en')
- 
+    topheadlines = newsapi.get_top_headlines(q='covid' or 'coronavirus',language='en',page_size=100)
+
     articles = topheadlines['articles']
  
     news_description = []
@@ -35,7 +36,7 @@ def news_page():
  
     return render_template('news.html', context=newsl_list, title=title)
 
-
+    dataframe = pd.DataFrame(articles)
 
 
 
