@@ -1,28 +1,32 @@
+# Project Title
+
 CS 361 Project Team03-COVIDCoach
 
-
-
-
-To set up project enviorment: 
-
-
+## Setup:
 Create a venv folder within the project folder:
-
+```
 $ python3 -m venv venv
 
-
+```
 To activate the environment:
-
+```
 $ . venv/bin/activate
-
-
-Within the activated environment, use the following command to install Flask:
-
+```
+Within the activated environment:
+```
 $ pip install Flask
-
-
+$ pip install newsapi-python
+$ pip install pandas
+```
 Start running the application:
-
+```
 $ export FLASK_APP=app.py
-
 $ flask run
+```
+## Authors
+
+* **Yang Yang** 
+* **Meng Ding** 
+* **Yiqiao Lu** 
+* **Zan Zhang** 
+* **Yang Zhang** 
