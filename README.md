@@ -1,8 +1,18 @@
-"# Team03-COVIDCoach" 
-"# Team03-COVIDCoach" 
+CS 361 Project Team03-COVIDCoach
 
-Test commit - Yang
-Test commit - Lu
-Test commit - Zan
-Test commit - Yang Zhang
-Test commit - Meng Ding
+
+
+To set up project enviorment: 
+
+Create a venv folder within the project folder:
+$ python3 -m venv venv
+
+To activate the environment:
+$ . venv/bin/activate
+
+Within the activated environment, use the following command to install Flask:
+$ pip install Flask
+
+Start running the application:
+$ export FLASK_APP=app.py
+$ flask run
