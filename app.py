@@ -1,10 +1,9 @@
 from flask import Flask, render_template
-from flask_bootstrap import Bootstrap
 from newsapi import NewsApiClient
 import pandas as pd
+import initDB as iDB
 
 app = Flask(__name__)
-bootstrap = Bootstrap(app)
 
 @app.route('/')
 def index():
@@ -40,7 +39,16 @@ def news_page():
 
     dataframe = pd.DataFrame(articles)
 
+@app.route('/details')
+def details():
+    return render_template('details.html')
 
+@app.route('/initDB')
+def init_db():
+    title = 'COVID Coach'
+    handler = iDB.initDB()
+    handler.run()
+    return render_template('index.html', title=title)
 
 @app.route('/help')
 def help_page():
@@ -54,7 +62,3 @@ def board_page():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=3000)
-
-
-
-
