@@ -16,6 +16,7 @@ Within the activated environment:
 $ pip install Flask
 $ pip install newsapi-python
 $ pip install pandas
+$ pip install flask-bootstrap
 ```
 Start running the application:
 ```
