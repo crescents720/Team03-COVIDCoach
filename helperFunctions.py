@@ -47,8 +47,7 @@ def get_stats_list():
 	response_USA = requests.request("GET", url_USA, headers=headers, params=querystring_USA)
 	obj = response_USA.json()
 	data_USA = obj[0]
-	data_USA_1 = {'confirmed':data_USA['confirmed'],'critical':data_USA['critical'],'recovered':data_USA['recovered'],'deaths':data_USA['deaths']}
-
+	data_USA_1 = {'confirmed':data_USA['confirmed'],'recovered':data_USA['recovered'],'critical':data_USA['critical'],'deaths':data_USA['deaths']}
 
 	list_of_two_dicts = [data_world, data_USA_1]
 	print(list_of_two_dicts[0])
