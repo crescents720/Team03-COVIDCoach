@@ -1,11 +1,6 @@
-{% extends 'bootstrap/base.html' %}
+{% extends 'base.html' %}
 
-
-{% block navbar %}
- {% include 'navbar.html' %}
-{% endblock %}
-
-{% block content %}
+{% block app_content %}
 	<h1>Home Page</h1>
 	<div class="container">
 
@@ -28,6 +23,4 @@
 			</tr>		
 		{% endfor %}
 	</table>
-
-
 {% endblock %}
