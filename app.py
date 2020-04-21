@@ -1,6 +1,9 @@
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
 from helperFunctions import get_news_list
+from helperFunctions import get_stats_list
+
+
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -8,7 +11,13 @@ bootstrap = Bootstrap(app)
 @app.route('/')
 def index():
     title = 'COVID Coach'
-    return render_template('index.html', title=title)
+
+    listOf2 = get_stats_list() 
+    world_dict = listOf2[0]
+    usa_dict = listOf2[1]
+
+    return render_template('index.html', world=world_dict, usa=usa_dict, title=title)
+
 
 @app.route('/news')
 def news_page():

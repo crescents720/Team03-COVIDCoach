@@ -6,6 +6,28 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Home Page</h1>
-{% endblock %}
+	<h1>Home Page</h1>
+	<div class="container">
 
+	<h3>World</h3>
+	<table>
+		{% for i, j in world.items() %}
+			<tr>
+				<td>{{ i }}: </td>
+				<td>{{ j }}</td>
+			</tr>		
+		{% endfor %}
+	</table>
+
+	<h3>United States</h3>
+	<table>
+		{% for i, j in usa.items() %}
+			<tr>
+				<td>{{ i }}: </td>
+				<td>{{ j }}</td>
+			</tr>		
+		{% endfor %}
+	</table>
+
+
+{% endblock %}
