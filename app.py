@@ -26,7 +26,7 @@ def news_page():
     return render_template('news.html', context=news_list, title=title)
 
 @app.route('/help')
-def help_page():
+def instruction_page():
     title = 'COVID Coach Get Help'
     return render_template('help.html', title=title)
 
