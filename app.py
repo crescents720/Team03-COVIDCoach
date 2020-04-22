@@ -14,6 +14,11 @@ def index():
     usa_dict = listOf2[1]
     return render_template('index.html', world=world_dict, usa=usa_dict, title=title)
 
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
+
 @app.route('/news')
 def news_page():
     title = 'COVID Coach Get News'

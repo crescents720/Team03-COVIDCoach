@@ -8,13 +8,15 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/">Home</a>
+      <a class="navbar-brand" href="{{ url_for('index') }}">Home</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="/news">Get News<span class="sr-only">(current)</span></a></li>
+        <li class="{% if request.endpoint == 'news_page' %}active{% endif %}">
+          <a href="{{ url_for('news_page') }}">Get News</a>
+        </li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Get Help<span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -22,7 +24,9 @@
             <li><a href="#">Find closet hospital</a></li>
           </ul>
         </li>
-           <li><a href="/board">Get Talk</a></li>
+           <li class="{% if request.endpoint == 'board_page' %}active{% endif %}">
+             <a href="{{ url_for('board_page') }}">Get Talk</a>
+           </li>
       </ul>
 
 <!--      <form class="navbar-form navbar-left">-->
@@ -33,17 +37,10 @@
 <!--      </form>-->
 
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Log In/Sign Up</a></li>
-<!--        <li class="dropdown">-->
-<!--          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>-->
-<!--          <ul class="dropdown-menu">-->
-<!--            <li><a href="#">Action</a></li>-->
-<!--            <li><a href="#">Another action</a></li>-->
-<!--            <li><a href="#">Something else here</a></li>-->
-<!--            <li role="separator" class="divider"></li>-->
-<!--            <li><a href="#">Separated link</a></li>-->
-<!--          </ul>-->
-<!--        </li>-->
+        <li class="{% if request.endpoint == 'register' %}active{% endif %}">
+          <a href="{{ url_for('register') }}">Log In/Sign Up</a>
+        </li>
+
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
