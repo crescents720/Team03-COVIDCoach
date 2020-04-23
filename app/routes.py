@@ -6,7 +6,7 @@ from app.models import User
 
 from app.helperFunctions import get_news_list
 from app.helperFunctions import get_stats_list
-
+import sqlite3
 
 @app.route('/')
 def index():
@@ -36,6 +36,19 @@ def news_page():
     title = 'COVID Coach Get News'
     news_list = get_news_list()
     return render_template('news.html', context=news_list, title=title)
+
+@app.route('/news_detail/<key>')
+def news_detail_page(key):
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM news_table where news_id = ?',(key))
+    fetched_item = c.fetchone()
+    print(fetched_item[0])
+    print(fetched_item[1])
+    print(fetched_item[2])
+    pass_context = (fetched_item[0],fetched_item[1],fetched_item[2],fetched_item[3],fetched_item[4],fetched_item[5],fetched_item[6],fetched_item[7])
+    return render_template('news_detail.html', context = pass_context)
+
 
 @app.route('/help')
 def instruction_page():

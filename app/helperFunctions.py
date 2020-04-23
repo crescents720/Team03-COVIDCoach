@@ -2,6 +2,7 @@ from newsapi import NewsApiClient
 import pandas as pd
 import requests
 import json
+import sqlite3
 
 
 def get_news_list():
@@ -9,20 +10,39 @@ def get_news_list():
     topheadlines = newsapi.get_top_headlines(q='covid' or 'coronavirus', language='en', page_size=100)
 
     articles = topheadlines['articles']
-
+    countList = []
     news_description = []
     news_title = []
     news_image = []
     news_url = []
 
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute('DROP TABLE IF EXISTS news_table')
+    c.execute(
+        'CREATE TABLE IF NOT EXISTS news_table(news_id INTEGER PRIMARY KEY, author TEXT, title TEXT, description TEXT, url TEXT, url_to_image TEXT, publish_date TEXT, content TEXT)')
+    # 该表字段包括：
+    # news_id           :   新闻编号（可考虑automatic increment） - p.k.主键
+    # author            :   作者名称
+    # title             :   标题
+    # description       :   描述
+    # url               :   原文链接
+    # url_to_image      :   图片地址
+    # publish_date      :   发布日期
+    # content           :   文章的内容
+    count = 0
     for i in range(len(articles)):
+        count = count + 1
+        countList.append(count)
         myarticles = articles[i]
         news_title.append(myarticles['title'])
         news_description.append(myarticles['description'])
         news_image.append(myarticles['urlToImage'])
         news_url.append(myarticles['url'])
+        c.execute('INSERT INTO news_table(author, title, description, url, url_to_image, publish_date, content) VALUES(?,?,?,?,?,?,?)', (myarticles['author'],myarticles['title'],myarticles['description'],myarticles['url'],myarticles['urlToImage'],myarticles['publishedAt'],myarticles['content']))
+    conn.commit()
 
-    news_list = zip(news_title, news_description, news_image, news_url)
+    news_list = zip(news_title, news_description, news_image, news_url, countList)
 
     # dataframe = pd.DataFrame(articles)
     return news_list
