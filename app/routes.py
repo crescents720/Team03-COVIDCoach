@@ -1,7 +1,8 @@
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
+from flask_login import login_user, login_required, current_user, logout_user
 
 from app import app, bcrypt, db
-from app.forms import RegisterForm
+from app.forms import RegisterForm, LoginForm
 from app.models import User
 
 from app.helperFunctions import get_news_list
@@ -18,6 +19,8 @@ def index():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     form = RegisterForm()
     if form.validate_on_submit():
         username = form.username.data
@@ -56,3 +59,38 @@ def instruction_page():
 def board_page():
     title = 'COVID Coach Message Board'
     return render_template('board.html', title=title)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        remember = form.remember.data
+        # Check if password is matched
+        user = User.query.filter_by(username=username).first()
+        # The reason we are combining these two conditions together is due to security, we don't want hackers to know if account exist or just password is wrong
+        if user and bcrypt.check_password_hash(user.password, password):
+            # User exists and password matched
+            login_user(user, remember=remember)
+            flash('Login success', category='info')
+            # Next three lines: we don't want redirect index page everytime when user login,we'll get which page user would like to access and redirect to that page
+            if request.args.get('next'):
+                next_page = request.args.get('next')
+                return redirect(next_page)
+            return redirect(url_for('index'))
+        flash('User not exists or password not matched', category='danger')
+    return render_template('login.html', form=form)
+
+@app.route('/account')
+@login_required
+def user_account_page():
+    title = 'COVID Coach My Account'
+    return render_template('myaccount.html', title=title)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))

@@ -34,6 +34,13 @@ Run
 /Applications/Python\ 3.7/Install\ Certificates.command
 ```
 
+## if app.db is existed before 4.28, delete it and open python console in pycharm
+Run
+```
+from app.models import db
+db.create_all()
+```
+
 ## Authors
 
 * **Meng Ding** 
