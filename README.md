@@ -21,6 +21,7 @@ $ pip install flask-sqlalchemy
 $ pip install flask-wtf
 $ pip install email-validator
 $ pip install flask-bcrypt
+$ pip install flask-login
 ```
 Start running the application:
 ```
