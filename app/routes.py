@@ -58,7 +58,11 @@ def news_detail_page(key):
 def instruction_page():
     title = 'COVID Coach Get Help'
     return render_template('help.html', title=title)
-
+    
+@app.route('/find')
+def find_page():
+    title = 'COVID Coach Get Help'
+    return render_template('find.html', title=title)
 
 @app.route('/board')
 def board_page():
