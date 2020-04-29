@@ -30,3 +30,14 @@ class LoginForm(FlaskForm):
     password = PasswordField('password', validators=[DataRequired(), Length(min=8, max=20)])
     remember = BooleanField('Remember My Account')
     submit = SubmitField('Sign In')
+
+
+class PasswordRestRequestForm(FlaskForm):
+
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Send')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if not user:
+            raise ValidationError('This email has not account linked.')

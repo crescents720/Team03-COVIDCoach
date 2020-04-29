@@ -2,12 +2,13 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, login_required, current_user, logout_user
 
 from app import app, bcrypt, db
-from app.forms import RegisterForm, LoginForm
+from app.forms import RegisterForm, LoginForm, PasswordRestRequestForm
 from app.models import User
 
 from app.helperFunctions import get_news_list
 from app.helperFunctions import get_stats_list
 import sqlite3
+
 
 @app.route('/')
 def index():
@@ -17,8 +18,10 @@ def index():
     usa_dict = listOf2[1]
     return render_template('index.html', world=world_dict, usa=usa_dict, title=title)
 
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    title = 'COVID Coach Account Registration'
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = RegisterForm()
@@ -30,8 +33,8 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash('Registration Success', category='success')
-        return redirect(url_for('index'))
-    return render_template('register.html', form=form)
+        return redirect(url_for('login'))
+    return render_template('register.html', form=form, title=title)
 
 
 @app.route('/news')
@@ -39,6 +42,7 @@ def news_page():
     title = 'COVID Coach Get News'
     news_list = get_news_list()
     return render_template('news.html', context=news_list, title=title)
+
 
 @app.route('/news_detail/<key>')
 def news_detail_page(key):
@@ -55,13 +59,16 @@ def instruction_page():
     title = 'COVID Coach Get Help'
     return render_template('help.html', title=title)
 
+
 @app.route('/board')
 def board_page():
     title = 'COVID Coach Message Board'
     return render_template('board.html', title=title)
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    title = 'COVID Coach Account Log In'
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
@@ -82,7 +89,8 @@ def login():
                 return redirect(next_page)
             return redirect(url_for('index'))
         flash('User not exists or password not matched', category='danger')
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, title=title)
+
 
 @app.route('/account')
 @login_required
@@ -90,7 +98,17 @@ def user_account_page():
     title = 'COVID Coach My Account'
     return render_template('myaccount.html', title=title)
 
+
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+
+@app.route('/send_password_reset_request', methods=['GET', 'POST'])
+def send_password_reset_request():
+    title = 'COVID Coach Reset Password'
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = PasswordRestRequestForm()
+    return render_template('send_password_reset_request.html', form=form, title=title)

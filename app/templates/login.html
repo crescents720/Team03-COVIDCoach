@@ -8,7 +8,15 @@
       {% import 'bootstrap/wtf.html' as wtf %}
       {{ wtf.quick_form(form) }}
     </div>
-
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <hr>
+      Forgot password?
+      <a href="{{ url_for('send_password_reset_request') }}">
+        Click here to reset.
+      </a>
+    </div>
   </div>
 
 {% endblock %}
