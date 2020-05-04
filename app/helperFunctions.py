@@ -18,9 +18,9 @@ def get_news_list():
 
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
-    c.execute('DROP TABLE IF EXISTS news_table')
-    c.execute(
-        'CREATE TABLE IF NOT EXISTS news_table(news_id INTEGER PRIMARY KEY, author TEXT, title TEXT, description TEXT, url TEXT, url_to_image TEXT, publish_date TEXT, content TEXT)')
+    # c.execute('DROP TABLE IF EXISTS news_table')
+    # c.execute(
+    #     'CREATE TABLE IF NOT EXISTS news_table(news_id INTEGER PRIMARY KEY, author TEXT, title TEXT, description TEXT, url TEXT, url_to_image TEXT, publish_date TEXT, content TEXT)')
     # 该表字段包括：
     # news_id           :   新闻编号（可考虑automatic increment） - p.k.主键
     # author            :   作者名称
@@ -30,7 +30,10 @@ def get_news_list():
     # url_to_image      :   图片地址
     # publish_date      :   发布日期
     # content           :   文章的内容
-    count = 0
+
+    c.execute('SELECT count(*) FROM news_table')
+    count = c.fetchone()[0]
+    print(count)
     for i in range(len(articles)):
         count = count + 1
         countList.append(count)

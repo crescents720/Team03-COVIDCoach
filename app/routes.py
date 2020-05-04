@@ -4,6 +4,7 @@ from flask_login import login_user, login_required, current_user, logout_user
 from app import app, bcrypt, db
 from app.forms import RegisterForm, LoginForm, PasswordRestRequestForm
 from app.models import User
+from app.initDB import initDB
 
 from app.helperFunctions import get_news_list
 from app.helperFunctions import get_stats_list
@@ -12,6 +13,16 @@ import sqlite3
 
 @app.route('/')
 def index():
+    title = 'COVID Coach'
+    listOf2 = get_stats_list()
+    world_dict = listOf2[0]
+    usa_dict = listOf2[1]
+    return render_template('index.html', world=world_dict, usa=usa_dict, title=title)
+
+@app.route('/initDB')
+def initDB_page():
+    a = initDB()
+    a.run()
     title = 'COVID Coach'
     listOf2 = get_stats_list()
     world_dict = listOf2[0]
@@ -48,17 +59,54 @@ def news_page():
 def news_detail_page(key):
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
-    c.execute('SELECT * FROM news_table where news_id = ?',(key))
+    c.execute('SELECT * FROM news_table where news_id = ?',(key,))
+    fetched_item = c.fetchone()
+
+    pass_context = (fetched_item[0],fetched_item[1],fetched_item[2],fetched_item[3],fetched_item[4],fetched_item[5],fetched_item[6],fetched_item[7])
+    c.execute('SELECT count (liked) FROM user_behavior_table WHERE user_id = ? AND news_id = ?',(current_user.id, key))
+    ifLiked = c.fetchone()
+    return render_template('news_detail.html', context = pass_context, ifLiked = ifLiked)
+
+@app.route('/like/<news_id>')
+def like_page(news_id):
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute('SELECT count(*) FROM user_behavior_table WHERE user_id = ? AND news_id = ?',(current_user.id, news_id))
+    fetched_item = c.fetchone()
+    print(fetched_item[0])
+    if(fetched_item[0] == 0):
+        c.execute('INSERT INTO user_behavior_table(user_id, news_id, liked, viewed) VALUES(?,?,?,?)', (current_user.id, news_id, 1, 0))
+        conn.commit()
+    c.execute('SELECT * FROM news_table where news_id = ?',(news_id,))
     fetched_item = c.fetchone()
     pass_context = (fetched_item[0],fetched_item[1],fetched_item[2],fetched_item[3],fetched_item[4],fetched_item[5],fetched_item[6],fetched_item[7])
-    return render_template('news_detail.html', context = pass_context)
+    c.execute('SELECT count (liked) FROM user_behavior_table WHERE user_id = ? AND news_id = ?',(current_user.id, news_id))
+    ifLiked = c.fetchone()[0]
+    print(ifLiked)
+    return render_template('news_detail.html', context = pass_context, ifLiked = ifLiked)
 
+@app.route('/unlike/<news_id>')
+def unlike_page(news_id):
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute('SELECT count(*) FROM user_behavior_table WHERE user_id = ? AND news_id = ?',(current_user.id, news_id))
+    fetched_item = c.fetchone()
+    print(fetched_item)
+    if(fetched_item[0] > 0):
+        c.execute('DELETE FROM user_behavior_table WHERE user_id = ? AND news_id = ?', (current_user.id, news_id))
+        conn.commit()
+    c.execute('SELECT * FROM news_table where news_id = ?',(news_id,))
+    fetched_item = c.fetchone()
+    pass_context = (fetched_item[0],fetched_item[1],fetched_item[2],fetched_item[3],fetched_item[4],fetched_item[5],fetched_item[6],fetched_item[7])
+    c.execute('SELECT count (liked) FROM user_behavior_table WHERE user_id = ? AND news_id = ?',(current_user.id, news_id))
+    ifLiked = c.fetchone()[0]
+    return render_template('news_detail.html', context = pass_context, ifLiked = ifLiked)
 
 @app.route('/help')
 def instruction_page():
     title = 'COVID Coach Get Help'
     return render_template('help.html', title=title)
-    
+
 @app.route('/find')
 def find_page():
     title = 'COVID Coach Get Help'
@@ -100,7 +148,12 @@ def login():
 @login_required
 def user_account_page():
     title = 'COVID Coach My Account'
-    return render_template('myaccount.html', title=title)
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute('SELECT user_behavior_table.news_id, title, description, url, url_to_image FROM news_table INNER JOIN user_behavior_table ON news_table.news_id = user_behavior_table.news_id AND user_behavior_table.user_id = ?',(current_user.id,))
+    fetched_item = c.fetchall()
+    print(fetched_item)
+    return render_template('myaccount.html', title=title, likedHistory = fetched_item)
 
 
 @app.route('/logout')

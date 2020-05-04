@@ -1,5 +1,21 @@
 {% extends 'base.html' %}
 
 {% block app_content %}
+  <style media="screen">
+    h5 {
+      text-decoration: underline;
+    }
+    h5:hover {
+      color: blue;
+    }
+  </style>
   <h1>Hello, {{ current_user.username }} </h1>
+  <h3>Your Favorite Articles: </h3>
+  <div class="container">
+    {% for news_id, title, description, url, urlToImage in likedHistory %}
+      <h5 onclick="window.location.href='{{ url_for( 'news_detail_page' , key = news_id ) }}';">{{title}}</h5>
+      <h6>{{description}}</h6>
+      {% endfor %}
+  </div>
+
 {% endblock %}

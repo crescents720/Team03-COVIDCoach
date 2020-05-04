@@ -16,5 +16,27 @@
       <article>{{context[7]}}</article>
       <br>
       <button type="button" onclick="window.location.href='{{ context[4] }}';">Read More</button>
+			{% if ifLiked == 1 %}
+				<button id="like" type="button" style="color: red" onclick="myFunction({{ context[0] }});window.location.href='{{ url_for( 'unlike_page' , news_id = context[0] ) }}';">Liked</button>
+			{% else %}
+				<button id="like" type="button" onclick="myFunction({{ context[0] }});window.location.href='{{ url_for( 'like_page' , news_id = context[0] ) }}';">Like</button>
+			{% endif %}
+			<br>
   	</div>
+
+		<script>
+		    function myFunction(index) {
+		        y = document.getElementById("like")
+						if(y.innerHTML == "Like"){
+							y.innerHTML = "Liked";
+							y.style.color = "red";
+
+						}else{
+							y.innerHTML = "Like";
+							y.style.color = "black";
+
+						}
+
+		    }
+		</script>
 {% endblock %}
