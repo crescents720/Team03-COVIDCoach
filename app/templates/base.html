@@ -9,6 +9,11 @@
     {% endif %}
     {% endblock %}
 </title>
+{% block head %}
+    {{ super() }}
+    <script src="../static/js/echarts.min.js"></script>
+    <script src="../static/js/jquery.min.js"></script>
+{% endblock %}
 
 {% block navbar %}
   {% include 'navbar.html' %}
