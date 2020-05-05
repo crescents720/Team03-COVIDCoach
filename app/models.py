@@ -1,4 +1,6 @@
+from flask import current_app
 from flask_login import UserMixin
+import jwt
 
 from app import db, login
 
@@ -14,3 +16,15 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return '<User %r>' % self.username
+
+    def generate_reset_password_token(self):
+        return jwt.encode({'id': self.id}, current_app.config['SECRET_KEY'], algorithm='HS256')
+
+    @staticmethod
+    def check_reset_passwor_token(token):
+        try:
+            data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
+            return User.query.filter_by(id=data['id']).first()
+        except:
+            return
+

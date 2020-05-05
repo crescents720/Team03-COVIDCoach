@@ -41,3 +41,10 @@ class PasswordRestRequestForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if not user:
             raise ValidationError('This email has not account linked.')
+
+
+class ResetPasswordForm(FlaskForm):
+
+    password = PasswordField('password', validators=[DataRequired(), Length(min=8, max=20)])
+    confirm = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')
