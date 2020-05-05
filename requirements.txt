@@ -7,3 +7,5 @@ flask-wtf
 email-validator
 flask-bcrypt
 flask-login
+PyJWT
+flask-mail
