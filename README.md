@@ -24,7 +24,7 @@ $ pip install flask-bcrypt
 $ pip install flask-login
 $ pip install PyJWT
 $ pip install flask-mail
-
+```
 Start running the application:
 ```
 $ export FLASK_APP=app.py
