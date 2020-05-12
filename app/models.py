@@ -5,9 +5,16 @@ import jwt
 
 from app import db, login
 
+
 @login.user_loader
 def load_user(user_id):
     return User.query.filter_by(id=user_id).first()
+
+
+followers = db.Table('followers',
+    db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
+)
 
 
 class User(db.Model, UserMixin):
@@ -17,6 +24,12 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     # 'Post' is the Post class, backref is how we get find User from Post
     posts = db.relationship('Post', backref=db.backref('author', lazy=True))
+    followed = db.relationship(
+        'User', secondary=followers,
+        primaryjoin=(followers.c.follower_id == id),
+        secondaryjoin=(followers.c.follower_id == id),
+        backref=db.backref('followers', lazy=True), lazy=True
+    )
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -31,6 +44,17 @@ class User(db.Model, UserMixin):
             return User.query.filter_by(id=data['id']).first()
         except:
             return
+
+    def follow(self, user):
+        if not self.is_following(user):
+            self.followed.append(user)
+
+    def unfollow(self,user):
+        if self.is_following(user):
+            self.followed.remove(user)
+
+    def is_following(self, user):
+        return self.followed.filter(followers.c.follower_id == user.id).count() > 0
 
 
 class Post(db.Model):
