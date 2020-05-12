@@ -22,6 +22,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    avatar_img = db.Column(db.String(120), default='/static/asset/default-user-image.png', nullable=False)
     # 'Post' is the Post class, backref is how we get find User from Post
     posts = db.relationship('Post', backref=db.backref('author', lazy=True))
     followed = db.relationship(

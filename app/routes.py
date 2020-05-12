@@ -150,7 +150,9 @@ def user_account_page():
     c.execute('SELECT user_behavior_table.news_id, title, description, url, url_to_image FROM news_table INNER JOIN user_behavior_table ON news_table.news_id = user_behavior_table.news_id AND user_behavior_table.user_id = ?',(current_user.id,))
     fetched_item = c.fetchall()
     print(fetched_item)
-    return render_template('myaccount.html', title=title, likedHistory = fetched_item)
+    n_followers = len(current_user.followers)
+    n_followed = len(current_user.followed)
+    return render_template('myaccount.html', title=title, likedHistory=fetched_item, n_followers=n_followers, n_followed=n_followed)
 
 
 @app.route('/logout')
