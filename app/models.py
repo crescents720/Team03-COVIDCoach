@@ -15,6 +15,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    # 'Post' is the Post class, backref is how we get find User from Post
     posts = db.relationship('Post', backref=db.backref('author', lazy=True))
 
     def __repr__(self):
@@ -36,6 +37,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    # "user.id" - user is User class, we use class name but not capitalized the first letter
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):

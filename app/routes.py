@@ -4,7 +4,7 @@ from flask_login import login_user, login_required, current_user, logout_user
 from app import app, bcrypt, db
 from app.forms import RegisterForm, LoginForm, PasswordRestRequestForm, ResetPasswordForm, PostTweetForm
 from app.email import send_reset_password_mail
-from app.models import User
+from app.models import User, Post
 
 from app.initDB import initDB
 
@@ -197,6 +197,10 @@ def board_page():
     title = 'COVID Coach Message Board'
     form = PostTweetForm()
     if form.validate_on_submit():
-        pass
+        body = form.text.data
+        post = Post(body=body)
+        current_user.posts.append(post)
+        db.session.commit()
+        flash('You have post a new message', category='success')
     return render_template('board.html', title=title, form=form)
 
