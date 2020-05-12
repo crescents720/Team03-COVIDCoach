@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, login_required, current_user, logout_user
 
 from app import app, bcrypt, db
-from app.forms import RegisterForm, LoginForm, PasswordRestRequestForm, ResetPasswordForm
+from app.forms import RegisterForm, LoginForm, PasswordRestRequestForm, ResetPasswordForm, PostTweetForm
 from app.email import send_reset_password_mail
 from app.models import User
 
@@ -114,11 +114,6 @@ def find_page():
     title = 'COVID Coach Get Help'
     return render_template('find.html', title=title)
 
-@app.route('/board')
-def board_page():
-    title = 'COVID Coach Message Board'
-    return render_template('board.html', title=title)
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -195,4 +190,13 @@ def reset_password(token):
             flash('The user is not exist', category='info')
             return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
+
+
+@app.route('/board', methods=['GET', 'POST'])
+def board_page():
+    title = 'COVID Coach Message Board'
+    form = PostTweetForm()
+    if form.validate_on_submit():
+        pass
+    return render_template('board.html', title=title, form=form)
 
