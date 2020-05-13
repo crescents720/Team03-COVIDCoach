@@ -75,7 +75,7 @@ def like_page(news_id):
     c = conn.cursor()
     c.execute('SELECT count(*) FROM user_behavior_table WHERE user_id = ? AND news_id = ?',(current_user.id, news_id))
     fetched_item = c.fetchone()
-    print(fetched_item[0])
+    #print(fetched_item[0])
     if(fetched_item[0] == 0):
         c.execute('INSERT INTO user_behavior_table(user_id, news_id, liked, viewed) VALUES(?,?,?,?)', (current_user.id, news_id, 1, 0))
         conn.commit()
@@ -84,7 +84,7 @@ def like_page(news_id):
     pass_context = (fetched_item[0],fetched_item[1],fetched_item[2],fetched_item[3],fetched_item[4],fetched_item[5],fetched_item[6],fetched_item[7])
     c.execute('SELECT count (liked) FROM user_behavior_table WHERE user_id = ? AND news_id = ?',(current_user.id, news_id))
     ifLiked = c.fetchone()[0]
-    print(ifLiked)
+    #print(ifLiked)
     return render_template('news_detail.html', context = pass_context, ifLiked = ifLiked)
 
 @app.route('/unlike/<news_id>')
@@ -93,7 +93,7 @@ def unlike_page(news_id):
     c = conn.cursor()
     c.execute('SELECT count(*) FROM user_behavior_table WHERE user_id = ? AND news_id = ?',(current_user.id, news_id))
     fetched_item = c.fetchone()
-    print(fetched_item)
+    #print(fetched_item)
     if(fetched_item[0] > 0):
         c.execute('DELETE FROM user_behavior_table WHERE user_id = ? AND news_id = ?', (current_user.id, news_id))
         conn.commit()
@@ -149,7 +149,7 @@ def user_account_page():
     c = conn.cursor()
     c.execute('SELECT user_behavior_table.news_id, title, description, url, url_to_image FROM news_table INNER JOIN user_behavior_table ON news_table.news_id = user_behavior_table.news_id AND user_behavior_table.user_id = ?',(current_user.id,))
     fetched_item = c.fetchall()
-    print(fetched_item)
+    #print(fetched_item)
     n_followers = len(current_user.followers)
     n_followed = len(current_user.followed)
     return render_template('myaccount.html', title=title, likedHistory=fetched_item, n_followers=n_followers, n_followed=n_followed)

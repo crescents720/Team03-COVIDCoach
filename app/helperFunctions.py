@@ -33,7 +33,7 @@ def get_news_list():
 
     c.execute('SELECT count(*) FROM news_table')
     count = c.fetchone()[0]
-    print(count)
+    #print("number of fetched news: ", count)
     for i in range(len(articles)):
         count = count + 1
         countList.append(count)
@@ -74,7 +74,7 @@ def get_stats_list():
                   'critical': data_USA['critical'], 'deaths': data_USA['deaths']}
 
     list_of_two_dicts = [data_world, data_USA_1]
-    print(list_of_two_dicts[0])
-    print(list_of_two_dicts[1])
+    #print(list_of_two_dicts[0])
+    #print(list_of_two_dicts[1])
 
     return list_of_two_dicts

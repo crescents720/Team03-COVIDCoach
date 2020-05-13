@@ -55,7 +55,7 @@ class User(db.Model, UserMixin):
             self.followed.remove(user)
 
     def is_following(self, user):
-        print(self.followed.count(user))
+        #print(self.followed.count(user))
         return self.followed.count(user) > 0
 
 

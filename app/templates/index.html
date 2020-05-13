@@ -5,7 +5,7 @@
 	<div class="container">
 
 	<h3>World</h3>
-    <div id="word" style="width: 600px;height:400px;"></div>
+    <div id="world" style="width: 600px;height:400px;"></div>
 	<table>
 		{% for i, j in world.items() %}
 			<tr>
@@ -28,7 +28,7 @@
 
     </div>
     <script type="text/javascript">
-        var word = echarts.init(document.getElementById('word'));
+        var world = echarts.init(document.getElementById('world'));
         var united_states = echarts.init(document.getElementById('united_states'));
         function img_val(confirmed,recovered,critical,deaths,title) {
           option = {
@@ -69,7 +69,7 @@
         };
         return option
         }
-        word.setOption(img_val(parseInt($("table").find("td").eq(1).text()),parseInt($("table").find("td").eq(3).text()),parseInt($("table").find("td").eq(5).text()),parseInt($("table").find("td").eq(7).text()),'Word'));
+        world.setOption(img_val(parseInt($("table").find("td").eq(1).text()),parseInt($("table").find("td").eq(3).text()),parseInt($("table").find("td").eq(5).text()),parseInt($("table").find("td").eq(7).text()),'World'));
         united_states.setOption(img_val(parseInt($("table").find("td").eq(13).text()),parseInt($("table").find("td").eq(15).text()),parseInt($("table").find("td").eq(17).text()),parseInt($("table").find("td").eq(19).text()),'United States'))
     </script>
 {% endblock %}
