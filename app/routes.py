@@ -152,7 +152,8 @@ def user_account_page():
     print(fetched_item)
     n_followers = len(current_user.followers)
     n_followed = len(current_user.followed)
-    return render_template('myaccount.html', title=title, likedHistory=fetched_item, n_followers=n_followers, n_followed=n_followed)
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    return render_template('myaccount.html', title=title, likedHistory=fetched_item, n_followers=n_followers, n_followed=n_followed, posts=posts)
 
 
 @app.route('/logout')
