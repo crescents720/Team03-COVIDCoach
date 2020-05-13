@@ -34,7 +34,7 @@
   </div>
 
   <h2>Posts History</h2>
-  {% for post in posts %}
+  {% for post in posts.items %}
     <div class="media">
       <div class="media-left">
         <a href="#">
@@ -48,5 +48,31 @@
       </div>
     </div>
   {% endfor %}
+
+    <nav aria-label="Page navigation">
+      <center>
+        <ul class="pagination">
+          {% if posts.has_prev %}
+            <li>
+              <a href="{{ url_for('user_account_page', page=posts.prev_num) }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo; Prev</span>
+              </a>
+            </li>
+          {% endif %}
+
+          {% for i in range(posts.pages) %}
+          <li><a href="#">{{ i+1 }}</a></li>
+          {% endfor %}
+
+          {% if posts.has_next %}
+            <li>
+              <a href="{{ url_for('user_account_page', page=posts.next_num) }}" aria-label="Next">
+                <span aria-hidden="true">&raquo; Next</span>
+              </a>
+           </li>
+          {% endif %}
+       </ul>
+      </center>
+  </nav>
 
 {% endblock %}
