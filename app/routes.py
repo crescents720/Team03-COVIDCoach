@@ -152,9 +152,7 @@ def user_account_page():
     print(fetched_item)
     n_followers = len(current_user.followers)
     n_followed = len(current_user.followed)
-    page = request.args.get('page', 1, type=int)
-    posts = Post.query.order_by(Post.timestamp.desc()).paginate(page, 2, False)
-    return render_template('myaccount.html', title=title, likedHistory=fetched_item, n_followers=n_followers, n_followed=n_followed, posts=posts)
+    return render_template('myaccount.html', title=title, likedHistory=fetched_item, n_followers=n_followers, n_followed=n_followed)
 
 
 @app.route('/logout')
@@ -206,5 +204,47 @@ def board_page():
         current_user.posts.append(post)
         db.session.commit()
         flash('You have post a new message', category='success')
-    return render_template('board.html', title=title, form=form)
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.order_by(Post.timestamp.desc()).paginate(page, 5, False)
+    return render_template('board.html', title=title, form=form, posts=posts)
+
+
+@app.route('/user_post_page/<username>')
+@login_required
+def user_post_page(username):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        page = request.args.get('page', 1, type=int)
+        posts = Post.query.filter_by(user_id=user.id).order_by(Post.timestamp.desc()).paginate(page, 5, False)
+        return render_template('user_post_page.html', user=user, posts=posts)
+    else:
+        return '404'
+
+
+@app.route('/follow/<username>')
+@login_required
+def follow(username):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        current_user.follow(user)
+        db.session.commit()
+        page = request.args.get('page', 1, type=int)
+        posts = Post.query.filter_by(user_id=user.id).order_by(Post.timestamp.desc()).paginate(page, 5, False)
+        return render_template('user_post_page.html', user=user, posts=posts)
+    else:
+        return '404'
+
+
+@app.route('/unfollow/<username>')
+@login_required
+def unfollow(username):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        current_user.unfollow(user)
+        db.session.commit()
+        page = request.args.get('page', 1, type=int)
+        posts = Post.query.filter_by(user_id=user.id).order_by(Post.timestamp.desc()).paginate(page, 5, False)
+        return render_template('user_post_page.html', user=user, posts=posts)
+    else:
+        return '404'
 
