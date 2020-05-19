@@ -252,7 +252,7 @@ def unfollow(username):
 @app.route('/post', methods=['GET'])
 def post():
     if current_user.is_authenticated is False:
-        flash('请先登录~')
+        flash('Please log in first~')
         return redirect(url_for('login'))
     return render_template("post_msg.html")
 
@@ -261,7 +261,7 @@ def save_post():
     post = models.Post_DM(title=request.form['title'], body=request.form['content'], user_id=current_user.id, timestamp=time.time())
     db.session.add(post)
     db.session.commit()
-    flash('发布成功~')
+    flash('Your message already issued successfully~')
     title = 'COVID Coach'
     listOf2 = get_stats_list()
     world_dict = listOf2[0]
@@ -271,7 +271,7 @@ def save_post():
 @app.route('/userposts', methods=['GET'])
 def user_posts():
     if current_user.is_authenticated is False:
-        flash('请先登录~')
+        flash('Please log in first~')
         return redirect(url_for('login'))
 
     user_id = current_user.id
@@ -307,5 +307,5 @@ def reply():
                          user_id=current_user.id, timestamp=time.time())
     db.session.add(reply)
     db.session.commit()
-    flash('发表成功~')
+    flash('Your message already issued successfully~')
     return redirect(url_for('post_detail', post_id=request.form['post_id']))
