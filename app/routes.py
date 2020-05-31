@@ -275,7 +275,8 @@ def user_posts():
         return redirect(url_for('login'))
 
     user_id = current_user.id
-    posts = models.Post_DM.query.filter_by(user_id=user_id).all()
+    # posts = models.Post_DM.query.filter_by(user_id=user_id).all()
+    posts = models.Post_DM.query.all()
     user = models.User.query.get(user_id)
     return render_template("my_posts.html", posts=posts, user=user)
 
